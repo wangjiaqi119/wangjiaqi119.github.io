@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="facebook-domain-verification" content="n16ys44iblaezxkbhejrvo3ljhxnpg" />
+  <meta name="description" content="Momaxuan Game Development Studio — Creators of Beacon Guard, a 2.5D lighthouse tower defense Instant Game for Facebook and Messenger." />
+  <title>Momaxuan Game Development Studio | Beacon Guard</title>
+  <style>
+    :root {
+      --bg-deep: #050b16;
+      --bg-ocean: #0a1628;
+      --bg-surface: rgba(13, 27, 46, 0.78);
+      --bg-surface-strong: rgba(16, 33, 56, 0.92);
+      --border-subtle: rgba(125, 211, 252, 0.16);
+      --border-glow: rgba(253, 224, 71, 0.35);
+      --text-primary: #f1f5f9;
+      --text-secondary: #9fb3cc;
+      --text-muted: #6e84a3;
+      --accent-cyan: #38bdf8;
+      --accent-teal: #2dd4bf;
+      --accent-gold: #fde047;
+      --accent-amber: #f59e0b;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow-card: 0 20px 50px rgba(2, 6, 16, 0.55);
+      --max-width: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -10%, rgba(56, 189, 248, 0.18), transparent 65%),
+        radial-gradient(circle at 82% 18%, rgba(253, 224, 71, 0.11), transparent 40%),
+        radial-gradient(circle at 12% 65%, rgba(45, 212, 191, 0.08), transparent 45%),
+        linear-gradient(180deg, #060e1d 0%, #09162a 48%, #050b16 100%);
+      overflow-x: hidden;
+    }
+
+    /* Subtle isometric tech grid backdrop */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(125, 211, 252, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 211, 252, 0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, #000 20%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 25%, #000 20%, transparent 80%);
+    }
+
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Header / Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(6, 13, 26, 0.78);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 70px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.24), rgba(253, 224, 71, 0.2));
+      border: 1px solid rgba(253, 224, 71, 0.42);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(253, 224, 71, 0.14);
+      flex-shrink: 0;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.15;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      color: #f8fafc;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--accent-cyan);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 999px;
+      transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    nav a:hover {
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.12);
+      border-color: rgba(56, 189, 248, 0.25);
+    }
+
+    /* Section Base */
+    section {
+      padding: 76px 0;
+    }
+
+    .section-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      padding: 5px 13px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+    }
+
+    .section-eyebrow.gold {
+      color: var(--accent-gold);
+      background: rgba(253, 224, 71, 0.1);
+      border-color: rgba(253, 224, 71, 0.32);
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .section-lead {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 720px;
+    }
+
+    /* Hero / Section 1: Studio Intro */
+    .hero {
+      padding: 84px 0 68px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: clamp(32px, 4.8vw, 52px);
+      font-weight: 800;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+      margin-bottom: 18px;
+      color: #ffffff;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(95deg, #7dd3fc 0%, #fde047 65%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle-cn {
+      font-size: 15px;
+      color: #bae6fd;
+      margin-bottom: 18px;
+      font-weight: 500;
+    }
+
+    .hero-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+      max-width: 600px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 34px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f59e0b 0%, #fde047 100%);
+      color: #0b1424;
+      box-shadow: 0 10px 26px rgba(245, 158, 11, 0.28);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(253, 224, 71, 0.36);
+    }
+
+    .btn-ghost {
+      background: rgba(15, 31, 53, 0.85);
+      color: #e2e8f0;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-2px);
+      border-color: rgba(125, 211, 252, 0.45);
+      background: rgba(24, 48, 80, 0.9);
+    }
+
+    .studio-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .metric-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+    }
+
+    .metric-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin-bottom: 4px;
+    }
+
+    .metric-lbl {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.4;
+    }
+
+    /* Studio Info Card */
+    .studio-panel {
+      background: linear-gradient(160deg, rgba(15, 33, 58, 0.92), rgba(8, 19, 36, 0.96));
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .studio-panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-gold), var(--accent-teal));
+    }
+
+    .panel-heading {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pillar-list {
+      list-style: none;
+      display: grid;
+      gap: 14px;
+    }
+
+    .pillar-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      background: rgba(6, 15, 29, 0.55);
+      border: 1px solid rgba(125, 211, 252, 0.1);
+    }
+
+    .pillar-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .pillar-item strong {
+      display: block;
+      font-size: 14px;
+      color: #f8fafc;
+      margin-bottom: 2px;
+    }
+
+    .pillar-item span {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    /* Section 2: Beacon Guard Showcase */
+    .game-section {
+      border-top: 1px solid rgba(125, 211, 252, 0.1);
+      border-bottom: 1px solid rgba(125, 211, 252, 0.1);
+      background: linear-gradient(180deg, rgba(10, 24, 44, 0.42), rgba(7, 16, 30, 0.72));
+    }
+
+    .game-card {
+      margin-top: 34px;
+      display: grid;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 34px;
+      align-items: center;
+      background: var(--bg-surface-strong);
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .game-visual {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1px solid rgba(253, 224, 71, 0.24);
+      background: radial-gradient(circle at 50% 35%, #132a4a 0%, #091527 72%, #050c18 100%);
+      aspect-ratio: 16 / 11;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .game-visual svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    @keyframes beamSweep {
+      0%, 100% {
+        transform: rotate(-16deg);
+        opacity: 0.78;
+      }
+      50% {
+        transform: rotate(16deg);
+        opacity: 0.96;
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        opacity: 0.55;
+        transform: scale(0.95);
+      }
+      50% {
+        opacity: 0.95;
+        transform: scale(1.08);
+      }
+    }
+
+    .svg-beam {
+      transform-origin: 240px 104px;
+      animation: beamSweep 6.5s ease-in-out infinite;
+    }
+
+    .svg-beacon-pulse {
+      transform-origin: 240px 104px;
+      animation: pulseGlow 2.8s ease-in-out infinite;
+    }
+
+    .game-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 11px;
+      border-radius: 999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      color: #bae6fd;
+    }
+
+    .tag.gold {
+      background: rgba(253, 224, 71, 0.12);
+      border-color: rgba(253, 224, 71, 0.35);
+      color: var(--accent-gold);
+    }
+
+    .game-content h3 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #ffffff;
+      margin-bottom: 12px;
+    }
+
+    .game-content p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 22px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .feature-box {
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      background: rgba(6, 14, 28, 0.68);
+      border: 1px solid rgba(125, 211, 252, 0.14);
+    }
+
+    .feature-box h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #f8fafc;
+      margin-bottom: 5px;
+    }
+
+    .feature-box p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Section 3: Privacy Policy */
+    .policy-shell {
+      margin-top: 32px;
+      background: var(--bg-surface-strong);
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      border-radius: var(--radius-lg);
+      padding: 38px 40px;
+      box-shadow: var(--shadow-card);
+    }
+
+    .policy-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 24px;
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(125, 211, 252, 0.14);
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .policy-meta strong {
+      color: #e2e8f0;
+    }
+
+    .policy-block {
+      margin-bottom: 26px;
+    }
+
+    .policy-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .policy-block h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .policy-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 800;
+      background: rgba(56, 189, 248, 0.14);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      flex-shrink: 0;
+    }
+
+    .policy-block p {
+      font-size: 14.5px;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .policy-block ul,
+    .policy-block ol {
+      margin: 8px 0 12px 20px;
+      color: var(--text-secondary);
+      font-size: 14.5px;
+    }
+
+    .policy-block li {
+      margin-bottom: 7px;
+    }
+
+    .policy-block li strong {
+      color: #e2e8f0;
+    }
+
+    .deletion-callout {
+      margin-top: 14px;
+      padding: 20px 22px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, rgba(14, 116, 144, 0.18), rgba(15, 23, 42, 0.72));
+      border: 1px solid rgba(56, 189, 248, 0.34);
+    }
+
+    .deletion-callout h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-gold);
+      margin-bottom: 10px;
+    }
+
+    .inline-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 13px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.24);
+      color: #e0f2fe;
+      word-break: break-word;
+    }
+
+    .contact-card {
+      margin-top: 12px;
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+      background: rgba(6, 14, 28, 0.72);
+      border: 1px solid rgba(125, 211, 252, 0.16);
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .contact-card a {
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(4, 9, 19, 0.92);
+      padding: 36px 0 42px;
+      margin-top: 30px;
+    }
+
+    .footer-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+      font-size: 13px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-gold);
+    }
+
+    .footer-legal {
+      font-size: 13.5px;
+      color: #cbd5e1;
+      font-weight: 500;
+      max-width: 920px;
+      line-height: 1.7;
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 920px) {
+      .hero-grid,
+      .game-card {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 58px 0 48px;
+      }
+
+      section {
+        padding: 56px 0;
+      }
+
+      .game-card {
+        padding: 24px;
+      }
+
+      .policy-shell {
+        padding: 26px 22px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 16px;
+      }
+
+      .nav-inner {
+        padding: 10px 0;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      nav {
+        width: 100%;
+        gap: 4px;
+      }
+
+      nav a {
+        font-size: 13px;
+        padding: 6px 11px;
+      }
+
+      .studio-metrics,
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .policy-shell {
+        padding: 22px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="page-wrap">
+    <!-- Top Navigation -->
+    <header>
+      <div class="container nav-inner">
+        <a class="brand" href="#studio">
+          <div class="brand-mark" aria-hidden="true">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2L14.5 6H9.5L12 2Z" fill="#fde047" />
+              <rect x="9.5" y="6" width="5" height="3.2" rx="0.8" fill="#fef08a" />
+              <path d="M9 9.5H15L16.5 21H7.5L9 9.5Z" fill="#38bdf8" fill-opacity="0.9" />
+              <path d="M14.5 7.5L22 5.2V10L14.5 7.5Z" fill="#fde047" fill-opacity="0.6" />
+              <path d="M9.5 7.5L2 5.2V10L9.5 7.5Z" fill="#fde047" fill-opacity="0.35" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <span class="brand-title">Momaxuan Studio</span>
+            <span class="brand-sub">Instant Games &amp; HTML5 Craft</span>
+          </div>
+        </a>
+
+        <nav aria-label="Primary Navigation">
+          <a href="#studio">Studio</a>
+          <a href="#beacon-guard">Beacon Guard</a>
+          <a href="#privacy-policy">Privacy Policy</a>
+          <a href="#data-deletion">Data Deletion</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <!-- SECTION 1: Studio Introduction -->
+      <section id="studio" class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="section-eyebrow">Independent HTML5 Game Studio</div>
+            <h1 class="hero-title">
+              Crafting Instant <span class="highlight">2.5D Worlds</span> Built to Play Anywhere
+            </h1>
+            <p class="hero-subtitle-cn">
+              Momaxuan Game Development Studio · 墨码轩游戏开发工作室
+            </p>
+            <p class="hero-desc">
+              Momaxuan Game Development Studio is an independent interactive entertainment studio dedicated to designing lightweight, visually crisp HTML5 Instant Games for Facebook, Messenger, and the open web. We combine tactile 2.5D real-time strategy with zero-download performance so players worldwide can jump into rich tactical battles in seconds.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#beacon-guard">Explore Beacon Guard</a>
+              <a class="btn btn-ghost" href="#privacy-policy">Meta Privacy Policy</a>
+            </div>
+
+            <div class="studio-metrics">
+              <div class="metric-card">
+                <div class="metric-val">HTML5 / 2.5D</div>
+                <div class="metric-lbl">Zero-download cross-device web &amp; mobile architecture</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-val">&lt; 5 MB</div>
+                <div class="metric-lbl">Engineered for rapid Instant Games launch &amp; smooth 60 FPS</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-val">Player-First</div>
+                <div class="metric-lbl">Privacy-conscious design compliant with Meta platform policies</div>
+              </div>
+            </div>
+          </div>
+
+          <aside class="studio-panel" aria-label="Studio Pillars">
+            <h2 class="panel-heading">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="#38bdf8" stroke-width="2" />
+                <circle cx="12" cy="12" r="3" fill="#fde047" />
+              </svg>
+              What Defines Momaxuan Studio
+            </h2>
+            <ul class="pillar-list">
+              <li class="pillar-item">
+                <div class="pillar-dot">01</div>
+                <div>
+                  <strong>Instant Social Accessibility</strong>
+                  <span>Designed natively for Facebook and Messenger Instant Games—no installation, instant session entry, and seamless cross-device cloud saves.</span>
+                </div>
+              </li>
+              <li class="pillar-item">
+                <div class="pillar-dot">02</div>
+                <div>
+                  <strong>Deep Yet Intuitive Gameplay Loops</strong>
+                  <span>We pair approachable one-tap controls with strategic depth, real-time positioning, and replayable roguelite progression.</span>
+                </div>
+              </li>
+              <li class="pillar-item">
+                <div class="pillar-dot">03</div>
+                <div>
+                  <strong>Clean Engineering &amp; Transparency</strong>
+                  <span>Every title is built with lightweight rendering pipelines, responsive mobile-first layouts, and strict adherence to player data protection standards.</span>
+                </div>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <!-- SECTION 2: Flagship Game — Beacon Guard -->
+      <section id="beacon-guard" class="game-section">
+        <div class="container">
+          <div class="section-eyebrow gold">Flagship Title · Instant Game</div>
+          <h2 class="section-title">Beacon Guard</h2>
+          <p class="section-lead">
+            Command the last coastal lighthouse against encroaching shadow tides. Harness the sweeping golden beam, deploy specialized defenders on both flanks, and forge unstoppable roguelite builds in fast-paced 2.5D tactical waves.
+          </p>
+
+          <div class="game-card">
+            <!-- Bespoke Inline SVG 2.5D Island Lighthouse Scene -->
+            <div class="game-visual" role="img" aria-label="Beacon Guard 2.5D Lighthouse Tower Defense illustration">
+              <svg viewBox="0 0 480 330" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#071123" />
+                    <stop offset="60%" stop-color="#0f2340" />
+                    <stop offset="100%" stop-color="#133155" />
+                  </linearGradient>
+                  <linearGradient id="beamGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+                    <stop offset="0%" stop-color="#fef08a" stop-opacity="0.72" />
+                    <stop offset="55%" stop-color="#fde047" stop-opacity="0.24" />
+                    <stop offset="100%" stop-color="#fde047" stop-opacity="0" />
+                  </linearGradient>
+                  <linearGradient id="beamGradLeft" x1="100%" y1="50%" x2="0%" y2="50%">
+                    <stop offset="0%" stop-color="#fef08a" stop-opacity="0.48" />
+                    <stop offset="65%" stop-color="#fde047" stop-opacity="0.14" />
+                    <stop offset="100%" stop-color="#fde047" stop-opacity="0" />
+                  </linearGradient>
+                  <linearGradient id="islandTop" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2a5748" />
+                    <stop offset="100%" stop-color="#1b3a34" />
+                  </linearGradient>
+                  <linearGradient id="cliffSide" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#283a52" />
+                    <stop offset="100%" stop-color="#132033" />
+                  </linearGradient>
+                  <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95" />
+                    <stop offset="40%" stop-color="#fde047" stop-opacity="0.55" />
+                    <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+                  </radialGradient>
+                </defs>
+
+                <!-- Ocean & Sky Backdrop -->
+                <rect width="480" height="330" fill="url(#skyGrad)" />
+
+                <!-- Stars & Crescent Moon -->
+                <circle cx="84" cy="54" r="18" fill="#fef08a" fill-opacity="0.12" />
+                <circle cx="84" cy="54" r="11" fill="#fef9c3" fill-opacity="0.88" />
+                <circle cx="89" cy="51" r="10" fill="#09162b" />
+                <g fill="#e2e8f0" opacity="0.65">
+                  <circle cx="152" cy="36" r="1.4" />
+                  <circle cx="206" cy="52" r="1.1" />
+                  <circle cx="315" cy="34" r="1.6" />
+                  <circle cx="388" cy="60" r="1.3" />
+                  <circle cx="430" cy="38" r="1.1" />
+                  <circle cx="48" cy="96" r="1.2" />
+                </g>
+
+                <!-- Distant Sea Shimmers -->
+                <g stroke="#7dd3fc" stroke-linecap="round" stroke-width="2" opacity="0.22">
+                  <line x1="28" y1="158" x2="86" y2="158" />
+                  <line x1="364" y1="152" x2="438" y2="152" />
+                  <line x1="60" y1="306" x2="144" y2="306" />
+                  <line x1="312" y1="310" x2="412" y2="310" />
+                </g>
+
+                <!-- 2.5D Isometric Raised Island Battlefield -->
+                <polygon points="34,218 240,152 446,218 240,284" fill="url(#islandTop)" stroke="#52b788" stroke-opacity="0.35" stroke-width="1.5" />
+                <!-- Cliff Extrusion -->
+                <polygon points="34,218 240,284 240,302 34,236" fill="url(#cliffSide)" />
+                <polygon points="446,218 240,284 240,302 446,236" fill="#18273d" />
+
+                <!-- Isometric Road & Plaza Lines -->
+                <polygon points="104,218 240,174 376,218 240,262" fill="#334155" fill-opacity="0.45" stroke="#94a3b8" stroke-opacity="0.2" stroke-width="1" />
+                <ellipse cx="240" cy="218" rx="52" ry="22" fill="#475569" fill-opacity="0.72" stroke="#cbd5e1" stroke-opacity="0.25" />
+
+                <!-- Sweeping Rotating Volumetric Light Beam -->
+                <g class="svg-beam">
+                  <polygon points="240,104 468,162 442,248" fill="url(#beamGrad)" />
+                  <polygon points="240,104 38,176 62,232" fill="url(#beamGradLeft)" />
+                </g>
+
+                <!-- Illuminated Ground Buff Sector -->
+                <path d="M240,218 L392,196 A160,64 0 0,1 384,240 Z" fill="#fde047" fill-opacity="0.2" />
+
+                <!-- Allied Defenders (Left & Right Flanks) -->
+                <!-- Ally Vanguard -->
+                <g transform="translate(308, 212)">
+                  <ellipse cx="0" cy="14" rx="12" ry="5" fill="#040a14" fill-opacity="0.55" />
+                  <ellipse cx="0" cy="14" rx="15" ry="6.5" fill="none" stroke="#fde047" stroke-width="1.6" stroke-opacity="0.85" />
+                  <rect x="-6" y="-4" width="12" height="15" rx="4" fill="#38bdf8" />
+                  <circle cx="0" cy="-10" r="6" fill="#e2e8f0" />
+                  <rect x="4" y="-4" width="6" height="11" rx="2" fill="#1d6fa5" stroke="#bae6fd" stroke-width="1" />
+                </g>
+                <!-- Ally Archer -->
+                <g transform="translate(174, 214)">
+                  <ellipse cx="0" cy="14" rx="11" ry="4.5" fill="#040a14" fill-opacity="0.55" />
+                  <rect x="-5" y="-3" width="10" height="14" rx="3.5" fill="#2dd4bf" />
+                  <circle cx="0" cy="-9" r="5.5" fill="#d1fae5" />
+                  <path d="M-9,-6 Q-14,2 -9,10" stroke="#fde047" stroke-width="1.8" fill="none" />
+                </g>
+
+                <!-- Incoming Shadow Enemies -->
+                <g transform="translate(392, 218)">
+                  <ellipse cx="0" cy="13" rx="12" ry="5" fill="#040a14" fill-opacity="0.6" />
+                  <rect x="-6" y="-5" width="12" height="15" rx="4" fill="#9f1239" />
+                  <circle cx="0" cy="-11" r="6" fill="#4c0519" />
+                  <rect x="-4" y="-12" width="3" height="2" fill="#fb7185" />
+                </g>
+                <g transform="translate(94, 218)">
+                  <ellipse cx="0" cy="13" rx="12" ry="5" fill="#040a14" fill-opacity="0.6" />
+                  <rect x="-6" y="-5" width="12" height="15" rx="4" fill="#7e22ce" />
+                  <circle cx="0" cy="-11" r="6" fill="#3b0764" />
+                  <rect x="1" y="-12" width="3" height="2" fill="#f43f5e" />
+                </g>
+
+                <!-- Central 2.5D Lighthouse -->
+                <g>
+                  <!-- Plinth -->
+                  <ellipse cx="240" cy="216" rx="29" ry="12" fill="#334155" />
+                  <ellipse cx="240" cy="211" rx="27" ry="11" fill="#64748b" stroke="#1e293b" stroke-width="1.5" />
+                  <!-- Red & White Striped Tapered Body -->
+                  <polygon points="222,209 226,184 254,184 258,209" fill="#f1f5f9" />
+                  <polygon points="226,184 229,161 251,161 254,184" fill="#e11d48" />
+                  <polygon points="229,161 232,138 248,138 251,161" fill="#f1f5f9" />
+                  <polygon points="232,138 234,119 246,119 248,138" fill="#e11d48" />
+                  <!-- Door & Window -->
+                  <rect x="235" y="193" width="10" height="15" rx="5" fill="#0f172a" />
+                  <rect x="237" y="167" width="6" height="8" rx="1" fill="#fde047" />
+                  <!-- Gallery Deck -->
+                  <ellipse cx="240" cy="119" rx="16" ry="5.5" fill="#1e293b" stroke="#94a3b8" stroke-width="1.2" />
+                  <!-- Lantern Room -->
+                  <rect x="231" y="96" width="18" height="21" rx="2" fill="#fef08a" stroke="#334155" stroke-width="1.5" />
+                  <!-- Conical Roof -->
+                  <polygon points="240,78 227,96 253,96" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.2" />
+                  <circle cx="240" cy="76" r="2.8" fill="#fbbf24" />
+                  <!-- Beacon Glow -->
+                  <circle class="svg-beacon-pulse" cx="240" cy="104" r="30" fill="url(#lampGlow)" />
+                </g>
+
+                <!-- HUD Label Overlay inside Preview -->
+                <rect x="16" y="14" width="154" height="26" rx="13" fill="#06101f" fill-opacity="0.78" stroke="#38bdf8" stroke-opacity="0.35" />
+                <text x="30" y="31" fill="#fde047" font-size="11.5" font-weight="700" font-family="sans-serif">BEACON GUARD · 2.5D</text>
+              </svg>
+            </div>
+
+            <div class="game-content">
+              <div class="game-tags">
+                <span class="tag gold">2.5D Tower Defense</span>
+                <span class="tag">Roguelite Cards</span>
+                <span class="tag">Meta Instant Games</span>
+                <span class="tag">HTML5 WebGL / Canvas</span>
+              </div>
+              <h3>Defend the Light. Command the Flanks.</h3>
+              <p>
+                Built for quick, high-intensity sessions on Facebook and Messenger, <strong>Beacon Guard</strong> puts a glowing coastal lighthouse at the center of a 2.5D isometric island. As shadow raiders surge from both coasts, players manage regenerating light energy, summon complementary squads, and time tactical pushes inside the lighthouse's rotating beam.
+              </p>
+
+              <div class="feature-grid">
+                <div class="feature-box">
+                  <h4>Dynamic Lighthouse Beam</h4>
+                  <p>Allied units fighting within the golden light cone gain empowered attack buffs and tactical advantages against shadow foes.</p>
+                </div>
+                <div class="feature-box">
+                  <h4>Two-Flank Squad Tactics</h4>
+                  <p>Deploy Vanguards, Archers, and Paladins to either coast or let smart auto-dispatch reinforce the highest-threat lane.</p>
+                </div>
+                <div class="feature-box">
+                  <h4>Wave Roguelite Upgrades</h4>
+                  <p>Clear escalating enemy waves to draft 1 of 3 power-up cards—evolving your tower, energy economy, and army synergies.</p>
+                </div>
+                <div class="feature-box">
+                  <h4>Instant Play Anywhere</h4>
+                  <p>Runs smoothly across mobile and desktop browsers with lightweight assets, crisp visual feedback, and seamless cloud progress.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: Privacy Policy (Meta Instant Games Compliant) -->
+      <section id="privacy-policy">
+        <div class="container">
+          <div class="section-eyebrow">Legal &amp; Compliance</div>
+          <h2 class="section-title">Privacy Policy</h2>
+          <p class="section-lead">
+            This Privacy Policy explains how Momaxuan Game Development Studio handles player information for <strong>Beacon Guard</strong> and our HTML5 titles distributed on the Meta Instant Games (Facebook and Messenger) platform.
+          </p>
+
+          <article class="policy-shell">
+            <div class="policy-meta">
+              <div><strong>Effective Date:</strong> November 24, 2026</div>
+              <div><strong>Last Updated:</strong> November 24, 2026</div>
+              <div><strong>Applies To:</strong> Beacon Guard &amp; Momaxuan Instant Games</div>
+              <div><strong>Operator:</strong> Zhengzhou Hi-Tech Industrial Development Zone Momaxuan Game Development Studio</div>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">1</span>Overview &amp; Scope</h3>
+              <p>
+                Zhengzhou Hi-Tech Industrial Development Zone Momaxuan Game Development Studio ("<strong>Momaxuan Studio</strong>", "<strong>we</strong>", "<strong>our</strong>", or "<strong>us</strong>") respects your privacy and is committed to protecting player information in accordance with applicable data protection laws and Meta Platform Terms and Developer Policies. This policy describes what limited data we access when you play <strong>Beacon Guard</strong> through Facebook Instant Games or Messenger, how we use it, and how you can request deletion of your data at any time.
+              </p>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">2</span>Information We Access via Meta Instant Games</h3>
+              <p>
+                When you launch and play <strong>Beacon Guard</strong> on Meta Instant Games, we access only the minimum platform-provided information required to deliver core gameplay and social features through the official Meta Instant Games SDK (<span class="inline-code">FBInstant</span>):
+              </p>
+              <ul>
+                <li><strong>Basic Player Profile Information:</strong> Your app-scoped Facebook Player ID, display name, profile photo URL, and preferred language/locale, used solely to display your identity in-game, render social leaderboards, and customize localized text.</li>
+                <li><strong>Gameplay &amp; Cloud Save Data:</strong> In-game progression such as highest wave reached, unlocked upgrades, scores, settings, and preferences stored via Meta's Instant Games cloud storage APIs (<span class="inline-code">FBInstant.player.setDataAsync</span> / <span class="inline-code">getDataAsync</span>) so your progress syncs across devices.</li>
+                <li><strong>Social Context Metadata:</strong> Non-sensitive context identifiers (e.g., solo session, Messenger chat thread, or tournament context) provided by Meta when you explicitly choose to play with friends, share results, or join a leaderboard.</li>
+                <li><strong>Technical &amp; Platform Diagnostics:</strong> Basic device/platform type (e.g., iOS, Android, Web) and anonymous crash or performance telemetry needed to keep the game stable.</li>
+              </ul>
+              <p>
+                We do <strong>not</strong> request access to your private messages, friend lists outside Meta's built-in Instant Games context features, email address, phone number, or precise GPS location.
+              </p>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">3</span>How We Use Your Information</h3>
+              <p>We use the information described above strictly for legitimate game operations:</p>
+              <ul>
+                <li>To initialize game sessions, load and save your gameplay progress, and maintain fair leaderboards.</li>
+                <li>To enable optional social features initiated by you, such as friend score comparisons, Messenger match updates, and tournaments.</li>
+                <li>To monitor service reliability, diagnose technical errors, and prevent cheating or abuse.</li>
+                <li>To serve optional rewarded or interstitial advertisements through Meta Audience Network (where enabled), subject to Meta's own privacy controls and ad preferences.</li>
+              </ul>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">4</span>Data Sharing, Third Parties &amp; Retention</h3>
+              <p>
+                <strong>No Sale of Personal Data:</strong> Momaxuan Studio does not sell, rent, or trade your personal information to third parties.
+              </p>
+              <p>
+                Your gameplay and profile data are primarily processed within the Meta Instant Games platform infrastructure in accordance with Meta's Privacy Policy. Where we use trusted infrastructure providers for error diagnostics or optional analytics, those providers are bound by strict confidentiality and data security obligations.
+              </p>
+              <p>
+                <strong>Data Retention:</strong> We retain gameplay progress and associated app-scoped identifiers only for as long as you maintain an active connection to the game or as required to comply with legal obligations. Inactive or deleted accounts are purged in accordance with our deletion workflow below.
+              </p>
+            </div>
+
+            <div class="policy-block" id="data-deletion">
+              <h3><span class="policy-num">5</span>User Data Deletion Instructions</h3>
+              <p>
+                You have full control over your data and may revoke game permissions and request deletion of all gameplay data associated with <strong>Beacon Guard</strong> at any time using either of the following methods:
+              </p>
+
+              <div class="deletion-callout">
+                <h4>Method A — Remove via Facebook Account Settings (Self-Service)</h4>
+                <ol>
+                  <li>Log in to your Facebook account and open <strong>Settings &amp; Privacy</strong> &gt; <strong>Settings</strong>.</li>
+                  <li>Navigate to <strong>Apps and Websites</strong> (or <strong>Instant Games</strong> in the Security/Permissions menu).</li>
+                  <li>Locate <strong>Beacon Guard</strong> in your list of active games and click <strong>View and Edit</strong> or <strong>Remove</strong>.</li>
+                  <li>Confirm removal and check the option to delete game history and stored activity if prompted. This immediately revokes our access to your Facebook profile information.</li>
+                </ol>
+
+                <h4 style="margin-top: 16px;">Method B — Direct Data Deletion Request to Momaxuan Studio</h4>
+                <p style="margin-bottom: 8px;">
+                  To request permanent erasure of any cloud save records or support correspondence held in connection with your app-scoped Player ID, send an email to our privacy team with the subject line <span class="inline-code">Data Deletion Request - Beacon Guard</span> and include your Facebook display name or in-game Player ID:
+                </p>
+                <p style="margin-bottom: 0;">
+                  <strong>Privacy Contact Email:</strong> <span class="inline-code">wangjiaqi119@hotmail.com</span><br />
+                  We will verify your request and permanently delete all associated player data within <strong>30 calendar days</strong> (typically within 7 business days), and send you written confirmation once completed.
+                </p>
+              </div>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">6</span>Children's Privacy</h3>
+              <p>
+                Our games are intended for general audiences in compliance with Meta's platform age requirements. We do not knowingly collect personal information from children under the age of 13 (or the applicable age of digital consent in your jurisdiction). If you believe a child has provided personal data to us without appropriate parental consent, please contact us immediately and we will promptly delete such information.
+              </p>
+            </div>
+
+            <div class="policy-block">
+              <h3><span class="policy-num">7</span>Policy Updates &amp; Contact Information</h3>
+              <p>
+                We may update this Privacy Policy periodically to reflect new gameplay features, platform guidelines, or legal requirements. Any changes will be posted on this page with an updated "Last Updated" date.
+              </p>
+              <div class="contact-card">
+                <strong>Data Controller / Studio Legal Name:</strong><br />
+                Zhengzhou Hi-Tech Industrial Development Zone Momaxuan Game Development Studio<br />
+                (郑州市高新技术产业开发区墨码轩游戏开发工作室)<br />
+                <strong>Privacy &amp; Support Email:</strong> <a href="mailto:wangjiaqi119@hotmail.com">wangjiaqi119@hotmail.com</a><br />
+                <strong>Region:</strong> Zhengzhou Hi-Tech Industrial Development Zone, Henan, China
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container footer-inner">
+        <div class="footer-links">
+          <a href="#studio">Studio Overview</a>
+          <a href="#beacon-guard">Beacon Guard</a>
+          <a href="#privacy-policy">Privacy Policy</a>
+          <a href="#data-deletion">User Data Deletion</a>
+        </div>
+        <p class="footer-legal">
+          © 2026 Zhengzhou Hi-Tech Industrial Development Zone Momaxuan Game Development Studio (郑州市高新技术产业开发区墨码轩游戏开发工作室). All Rights Reserved.
+        </p>
+        <p class="footer-note">
+          Independent HTML5 &amp; Instant Games Developer · Official Website &amp; Meta Platform Compliance Page
+        </p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
